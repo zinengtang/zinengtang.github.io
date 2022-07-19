@@ -63,7 +63,6 @@ let intros = [
   <br /><br />
 
   My primary research interests lie in the area of multi-modal learning, natural language processing, and machine learning.
-  Toward this goal, my work spans across
   <br /><br />
   `
 ]

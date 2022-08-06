@@ -57,9 +57,9 @@ function add_tag(tag) {
 
 let intros = [
   `  Hello! <br />
-  I am a fourth year undergraduate student majoring in Mathematics at the University of North Carolin at Chapel Hill.
+  I am a fourth year undergraduate student majoring in Mathematics at the University of North Carolina at Chapel Hill.
   I am fortunate to be advised by [mohit] in [uncnlp], [murgelab].
-  I have interned at Mircrosoft Research (in 2022) supervised by [ziyi].
+  I have interned at Microsoft Research (in 2022) supervised by [ziyi].
   <br /><br />
 
   My primary research interests lie in the area of multi-modal learning, natural language processing, and machine learning.

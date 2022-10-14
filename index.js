@@ -1,5 +1,23 @@
 window.onload = function () {
   // setup nav
+
+  function hideAll() {
+    if (!$(".navbar-collapse").hasClass("collapse")) {
+      $(".navbar-collapse").addClass("collapse");
+    }
+    // window.scrollTo(0, 0);
+    // $("#info").hide();
+    // $("#intro").hide();
+    // $("#publication").hide();
+    // $("#education").hide();
+    // $("#experience").hide();
+    // $("#service").hide();
+    // $("#demo").hide();
+    // $("#honorship").hide();
+    // $("#talks").hide();
+    // $("#teaching").hide();
+    // $("#personal").hide();
+  }
   $(".navbar-toggle").click(function(){
     if ($(".navbar-collapse").hasClass("collapse")) {
       $(".navbar-collapse").removeClass("collapse");
@@ -8,43 +26,20 @@ window.onload = function () {
     }
   })
 
-  function hideAll() {
-    if (!$(".navbar-collapse").hasClass("collapse")) {
-      $(".navbar-collapse").addClass("collapse");
-    }
-    window.scrollTo(0, 0);
-    $("#info").hide();
-    $("#intro").hide();
-    $("#publication").hide();
-    $("#education").hide();
-    $("#experience").hide();
-    $("#service").hide();
-    $("#demo").hide();
-    $("#honorship").hide();
-    $("#talks").hide();
-    $("#teaching").hide();
-    $("#personal").hide();
-  }
-
   hideAll();
   $("#info").show();
   $("#intro").show();
 
   $("#home-button").click(function(){
-    hideAll();
-    $("#info").show();
-    $("#intro").show();
+	  $("div#info")[0].scrollIntoView();
   })
 
   $("#background-button").click(function(){
-    hideAll();
-    $("#education").show();
-    $("#experience").show();
+	  $("div#education")[0].scrollIntoView();
   })
 
   $("#pub-button").click(function(){
-    hideAll();
-    $("#publication").show();
+     $("div#publication")[0].scrollIntoView();
   })
 
   // $("#service-button").click(function(){
@@ -58,8 +53,7 @@ window.onload = function () {
   // })
 
   $("#others-button").click(function(){
-    hideAll();
-    $("#honorship").show();
+    $("div#honorship")[0].scrollIntoView();
     // $("#talks").show();
     // $("#teaching").show();
     // $("#personal").hide();

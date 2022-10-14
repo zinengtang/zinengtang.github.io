@@ -4,6 +4,7 @@ let people = {
   'ziyi': "Ziyi Yang",
   'jaemin': "Jaemin Cho",
   'jie': "Jie Lei",
+  'yixin': "Yixin Nie",
   'hyounghun': "Hyounghun Kim",
   'shiyue': "Shiyue Zhang",
   'uncnlp': 'UNC-NLP',
@@ -31,6 +32,8 @@ let pub_dictionary = {
   "color": {'paper': "https://dl.acm.org/doi/abs/10.1145/3357384.3358085"},
   "vidlankd": {'paper': "https://proceedings.neurips.cc/paper/2021/file/ccdf3864e2fa9089f9eca4fc7a48ea0a-Paper.pdf",
                 'code': "https://github.com/zinengtang/VidLanKD"},
+  "tvlt": {'paper': "https://arxiv.org/abs/2209.14156",
+           'code': "https://github.com/zinengtang/TVLT"},
 }
 
 function add_link (title, link) {
@@ -56,12 +59,10 @@ function add_tag(tag) {
 }
 
 let intros = [
-  `  Hello! <br />
+  `
   I am a fourth year undergraduate student majoring in Mathematics at the University of North Carolina at Chapel Hill.
   I am fortunate to be advised by [mohit] in [uncnlp], [murgelab].
   I have interned at Microsoft Research (in 2022) supervised by [ziyi].
-  <br /><br />
-
   My primary research interests lie in the area of multi-modal learning, natural language processing, and machine learning.
   <br /><br />
   `
@@ -75,6 +76,13 @@ let intros = [
 
 
 let publications = [
+	["TVLT: Textless Vision-Language Transformer",
+	 ["zineng*", "jaemin*", "yixin*", "mohit"],
+	 "NeurIPS",
+	 "",
+	 "2022",
+	 "tvlt"
+	],
 	["Vidlankd: Improving language understanding via video-distilled knowledge transfer",
 	 ["zineng", "jaemin", "hao", "mohit"],
 	 "NeurIPS",
@@ -152,6 +160,7 @@ let demos = [
   ];
 
 let honors = [
+  "NeurIPS 2022 Scholar Award",
   "Honorable Mention, Outstanding Undergraduate Researcher Award 2022."
   + "<a href='https://cra.org/crn/' target='_blank'>Computing Research Association (CRA)</a> (2022)",
 ];

@@ -1,182 +1,272 @@
-<!--
-  Profile Page (https://zinengtang.github.io)
-  last updated: 2022
--->
+<!DOCTYPE HTML>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-<!DOCTYPE html>
-<html lang="en">
+  <title>Jon Barron</title>
   
-<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Zineng Tang</title>
-    <!-- Bootstrap -->
+  <meta name="author" content="Jon Barron">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link rel="stylesheet" type="text/css" href="stylesheet.css">
+	<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌐</text></svg>">
+</head>
 
-    <link href="styles/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="styles/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <!-- <link rel="shortcut icon" href="" type="image/vnd.microsoft.icon" /> -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-
-    <link href="styles/index.css" rel="stylesheet">
-  </head>
-
-  <body>
-
-    <!-- Navigation Start -->
-
-    <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
-            <i class="fa fa-bars"></i>
-          </button>
-          <div class="navbar-header my-nav">
-            <a class="navbar-brand" style="margin-left: 10px" href="#">Zineng Tang (唐子能)</a>
-          </div>
-        </div>
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse navbar-right navbar-main-collapse" style="max-height: 435px; transition: max-height 0.15s ease-out;">
-          <ul class="nav navbar-nav">
-            <li><a id="home-button">Intro</a></li>
-            <li><a id="pub-button">Publications</a></li>
-			<li><a id="background-button">Background</a></li>
-            <!-- <li><a id="service-button">Service</a></li> -->
-            <!-- <li><a id="demo-button">Demo</a></li> -->
-            <li><a id="others-button">Others</a></li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-
-
-    <!-- Main Container Start -->
-
-    <div id="background-container">
-
-      <div class="blank"></div>
-
-      <div class="my-container theme-showcase" role="main">
-
-        <div id="info">
-          <div class="row">
-            <div class="column col-md-6" style="width: 45%">
-              <img src="assets/terran.jpg" alt="zineng"/>
-            </div>
-            <div class="column-long col-md-6" style="width: 55%">
-              <div class="blank"></div>
-              <h2>Zineng Tang </h2>
-              <p>Undergraduate Student</p>
-              <p>Bachelor of Mathematics</p>
-              <p>University of North Carolina at Chapel Hill (UNC)</p>
-              <div class="blank"></div>
-
-              <div class="row">
-                <div class="column column-22">
-                  <a class="icons-sm git-ic" href="https://www.github.com/zinengtang" target="_blank"><i class="fa fa-github"></i> github</a>
-                </div>
-                <div class="column column-22">
-                  <a class="icons-sm twitter-ic" href="https://twitter.com/ZinengTang" target="_blank"><i class="fa fa-twitter-square"></i> twitter</a>
-                </div>
-                <div class="column column-22">
-                  <a class="icons-sm email-ic" href="mailto:terran@cs.unc.edu" target="_blank"><i class="fa fa-envelope-o"></i> email</a>
-                </div>
-                <!-- <div class="column column-22">
-                  <a href="assets/CV.pdf" target="_blank"><i class="fa fa-download"></i> CV</a>
-                </div>
-                <div class="column column-12">
-                  <a href="assets/bio.txt" target="_blank"><i class="fa fa-file-o"></i> bio</a>
-                </div> -->
-              </div>
-
-
-              <div class="row">
-                <div class="column column-44">
-                  <a href="https://scholar.google.com/citations?user=bZy4vtwAAAAJ&hl=zh-CN" target="_blank">
-                    <span style="font-size:120%"><i class="ai ai-google-scholar"></i></span>
-                    <!--<span style="font-size:110%"><i class="fa fa-google"></i></span>-->
-                    google scholar</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-
-        <div id="intro" class="field">
-          <div class="blank"></div>
-          <p id="intro-text"></p>
-        </div>
-
-        <div id="publication" class="field">
-          <div class="blank"></div>
-          <h3> Publications </h3>
-        </div>
-
-        <div id="education" class="field">
-          <div class="blank"></div>
-          <h3>Education</h3>
-        </div>
-
-        <div id="experience" class="field">
-          <div class="blank"></div>
-          <h3>Experiences</h3>
-        </div>
-
-        <!-- <div id="service" class="field">
-          <div class="blank"></div>
-          <h3> Services </h3>
-        </div> -->
-
-        <!-- <div id="demo" class="field">
-          <div class="blank"></div>
-          <h3> Demos </h3>
-        </div> -->
-<!-- 
-        <div id="talks" class="field">
-          <div class="blank"></div>
-          <h3> Invited Talks</h3>
-        </div> -->
-
-        <div id="honorship" class="field">
-          <div class="blank"></div>
-          <h3> Awards </h3>
-        </div>
-
-        <!-- div id="teaching" class="field">
-          <div class="blank"></div>
-          <h3> Teaching</h3>
-        </div>
-
-        <div id="personal" class="field">
-          <div class="blank"></div>
-          <h3> Personal </h3>
-          <p>Traveling & Youtube.</p>
-        </div> -->
-      </div>
-
-      <div class="blank"></div>
-
-
-    </div>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="contents.js"></script>
-    <script src="index.js"></script>
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-      ga('create', 'UA-89338781-1', 'auto');
-      ga('send', 'pageview');
-    </script>
-  </body>
+<body>
+  <table style="width:100%;max-width:800px;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+    <tr style="padding:0px">
+      <td style="padding:0px">
+        <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+          <tr style="padding:0px">
+            <td style="padding:2.5%;width:63%;vertical-align:middle">
+              <p style="text-align:center">
+                <name>Zineng Tang</name>
+              </p>
+              <p> I am a fourth year undergraduate student majoring in Mathematics at the University of North Carolina at Chapel Hill.
+				  I am advised by <a href="https://www.cs.unc.edu/~mbansal/">Mohit Bansal</a> in <a href="https://nlp.cs.unc.edu/">UNC-NLP</a>, <a href="https://murgelab.cs.unc.edu/">MURGe-Lab</a>. 
+				  I have interned at Microsoft Research (in 2022) supervised by <a href="https://scholar.google.com/citations?user=JkyLIM0AAAAJ&hl=en">Ziyi Yang</a>.
+              </p>
+              <p style="text-align:center">
+                <a href="mailto:zn.tang.terran@gmail.com">Email</a> &nbsp/&nbsp
+                <a href="data/Zineng-CV.pdf">CV</a> &nbsp/&nbsp
+                <!-- <a href="data/JonBarron-bio.txt">Bio</a> &nbsp/&nbsp -->
+                <a href="https://scholar.google.com/citations?user=bZy4vtwAAAAJ&hl=zh-CN">Google Scholar</a> &nbsp/&nbsp
+                <a href="https://twitter.com/ZinengTang">Twitter</a> &nbsp/&nbsp
+                <a href="https://github.com/zinengtang">Github</a>
+              </p>
+            </td>
+            <td style="padding:2.5%;width:30%;max-width:30%">
+              <a href="images/zineng.jpg"><img style="width:100%;max-width:100%" alt="profile photo" src="images/zineng.jpg" class="hoverZoomLink"></a>
+            </td>
+          </tr>
+        </tbody></table>
+        <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+            <tr>
+            <td style="padding:20px;width:100%;vertical-align:middle">
+              <heading>Research</heading>
+              <p>
+                My primary research interests lie in the area of multi-modal learning, natural language processing, and machine learning.
+              </p>
+            </td>
+          </tr>
+        </tbody></table>
+		
+		<script type="text/javascript">
+		  function start() {
+			document.getElementById('tvlt_image').style.opacity = "1";
+		  }
+		  function stop() {
+			document.getElementById('tvlt_image').style.opacity = "0";
+		  }
+		  stop()
+		</script>
+		
+        <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+					
+          <tr onmouseout="stop()" onmouseover="start()">
+			  <td style="padding:40px;width:35%;vertical-align:middle;padding-top:80px">
+				<div class="one">
+				  <img src='images/tvlt.png' width="250" style=>
+				</div>
+				<!-- </td> -->
+				
+			  </td>
+			  <td style="padding:40px;width:75%;vertical-align:middle;padding-top:80px">
+				<a href="https://arxiv.org/abs/2209.14156">
+				  <papertitle>TVLT: Textless Vision-Language Transformer</papertitle>
+				</a>
+				<br>
+				<strong>Zineng Tang*</strong>,
+				<a href="https://j-min.io/">Jaemin Cho</a>,
+				<a href="https://easonnie.github.io/">Yixin Nie</a>,
+			  <a href="https://www.cs.unc.edu/~mbansal/">Mohit Bansal</a>
+				<br>
+				<em>NeurIPS</em>, 2022
+				<br>
+				<a href="https://github.com/zinengtang/TVLT">github</a>
+				/
+				<a href="https://arxiv.org/abs/2209.14156">arXiv</a>
+				<p></p>
+				<p>
+				We built a textless vision-language transformer with a minimalist design.
+				</p>
+			  </td>
+			</tr>
+		  
+			<tr onmouseout="stop()" onmouseover="start()">
+			  <td style="padding:40px;width:35%;vertical-align:middle;padding-top:80px">
+				<div class="one">
+				  <img src='images/vidlankd.png' width="250">
+				</div>
+			  </td>
+			  <td style="padding:20px;width:75%;vertical-align:middle">
+				<a href="https://arxiv.org/pdf/2107.02681">
+				  <papertitle>Vidlankd: Improving language understanding via video-distilled knowledge transfer</papertitle>
+				</a>
+				<br>
+				<strong>Zineng Tang</strong>,
+				<a href="https://j-min.io/">Jaemin Cho</a>,
+				<a href="https://scholar.google.com/citations?user=OV1Y3FUAAAAJ&hl=en">Hao Tan</a>,
+			  <a href="https://www.cs.unc.edu/~mbansal/">Mohit Bansal</a>
+				<br>
+				<em>NeurIPS</em>, 2021
+				<br>
+				<a href="https://github.com/zinengtang/VidLanKD">github</a>
+				/
+				<a href="https://arxiv.org/pdf/2107.02681">arXiv</a>
+				<p></p>
+				<p>
+				We built a teacher-student transformer for visually grounded language learning.
+				</p>
+			  </td>
+			</tr>
+			
+			<tr onmouseout="stop()" onmouseover="start()">
+			  <td style="padding:40px;width:35%;vertical-align:middle;padding-top:80px">
+				<div class="one">
+				  <img src='images/decembert.png' width="250">
+				</div>
+			  </td>
+			  <td style="padding:20px;width:75%;vertical-align:middle">
+				<a href="https://aclanthology.org/2021.naacl-main.193/">
+				  <papertitle>Decembert: Learning from noisy instructional videos via dense captions and entropy minimization</papertitle>
+				</a>
+				<br>
+				<strong>Zineng Tang*</strong>,
+				<a href="https://jayleicn.github.io/">Jie Lei*</a>,
+			  <a href="https://www.cs.unc.edu/~mbansal/">Mohit Bansal</a>
+				<br>
+				<em>NAACL</em>, 2021
+				<br>
+				<a href="https://github.com/zinengtang/DeCEMBERT">github</a>
+				/
+				<a href="https://aclanthology.org/2021.naacl-main.193/">paper</a>
+				<p></p>
+				<p>
+				We built a video-language transformer that addresses the issues of noisy ASR data by dense captions and entropy minimization.
+				</p>
+			  </td>
+			</tr>		
+			<tr onmouseout="stop()" onmouseover="start()">
+			  <td style="padding:40px;width:35%;vertical-align:middle;padding-top:80px">
+				<div class="one">
+				  <img src='images/flow.png' width="250">
+				</div>
+			  </td>
+			  <td style="padding:20px;width:75%;vertical-align:middle">
+				<a href="https://aclanthology.org/2021.acl-long.355/">
+				  <papertitle>Continuous language generative flow</papertitle>
+				</a>
+				<br>
+				<strong>Zineng Tang</strong>,
+				<a href="https://www.cs.unc.edu/~shiyue/">Shiyue Zhang</a>,
+				<a href="https://hyounghk.github.io/">Hyounghun Kim</a>,
+			    <a href="https://www.cs.unc.edu/~mbansal/">Mohit Bansal</a>
+				<br>
+				<em>ACL</em>, 2021
+				<br>
+				<a href="https://github.com/zinengtang/ContinuousFlowNLG">github</a>
+				/
+				<a href="https://aclanthology.org/2021.acl-long.355/">paper</a>
+				<p></p>
+				<p>
+				We built a language framework basde on continuous generative flow.
+				</p>
+			  </td>
+			</tr>	
+            <tr onmouseout="stop()" onmouseover="start()">
+			  <td style="padding:40px;width:35%;vertical-align:middle;padding-top:80px">
+				<div class="one">
+				  <img src='images/densecap.png' width="250">
+				</div>
+			  </td>
+			  <td style="padding:20px;width:75%;vertical-align:middle">
+				<a href="https://arxiv.org/pdf/2005.06409">
+				  <papertitle>Dense-caption matching and frame-selection gating for temporal localization in VideoQA</papertitle>
+				</a>
+				<br>
+				<a href="https://hyounghk.github.io/">Hyounghun Kim</a>,
+				<strong>Zineng Tang</strong>,
+			    <a href="https://www.cs.unc.edu/~mbansal/">Mohit Bansal</a>
+				<br>
+				<em>ACL</em>, 2020
+				<br>
+				<a href="https://github.com/zinengtang/ContinuousFlowNLG">github</a>
+				/
+				<a href="https://arxiv.org/pdf/2005.06409">arxiv</a>
+				<p></p>
+				<p>
+				We built a video QA framework basde on various techniques like dense captions.
+				</p>
+			  </td>
+			</tr>
+        </tbody></table>
+		
+		<table width="100%" align="center" border="0" cellspacing="0" cellpadding="20"><tbody>
+		  <tr>
+			<td>
+			  <heading>Education</heading>
+			</td>
+		  </tr>
+		</tbody></table>
+		<table width="100%" align="center" border="0" cellpadding="20"><tbody>  
+			<tr>
+				<td style="padding:20px;width:25%;vertical-align:middle"><img width="100" src="images/unc.png"></td>
+				<td width="75%" valign="center">
+				  <p>UNC Chapel Hill, B.S. in Mathematics, 2019 - present </p>
+				</td>
+			</tr>	
+		</tbody></table>
+		
+		<table width="100%" align="center" border="0" cellspacing="0" cellpadding="20"><tbody>
+		  <tr>
+			<td>
+			  <heading>Experiences</heading>
+			</td>
+		  </tr>
+		</tbody></table>
+		<table width="100%" align="center" border="0" cellpadding="20"><tbody>  
+			<tr>
+				<td style="padding:20px;width:25%;vertical-align:middle"><img width="100" src="images/murgelab-logo.png"></td>
+				<td width="75%" valign="center">
+				  <p><a href="https://murgelab.cs.unc.edu/">MURGe-Lab</a>, Undergraduate Research Assistant </p>
+				</td>
+			</tr>	
+			<tr>
+				<td style="padding:20px;width:25%;vertical-align:middle"><img width="100" src="images/microsoft.png"></td>
+				<td width="75%" valign="center">
+				  <p><a href="https://www.microsoft.com/en-us/research/group/cognitive-services-research/">Microsoft Azure Cognitive Services Research</a>, Research Intern </p>
+				</td>
+			</tr>
+		</tbody></table>
+		
+		<table width="100%" align="center" border="0" cellspacing="0" cellpadding="20"><tbody>
+		  <tr>
+			<td>
+			  <heading>Awards</heading>
+			</td>
+		  </tr>
+		</tbody></table>
+		<table width="100%" align="center" border="0" cellpadding="20"><tbody>
+							
+			<tr>
+				<td width="100%" valign="center">
+				  <p>NeurIPS 2022 Scholar Award</p>
+				  <p>Honorable Mention, Outstanding Undergraduate Researcher Award 2022. Computing Research Association (CRA) (2022)</p>
+				</td>
+			</tr>
+		</tbody></table>	  
+        <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+          <tr>
+            <td style="padding:0px">
+              <br>
+              <p style="text-align:right;font-size:small;">
+                Website template mainly borrowed from <a href="https://jonbarron.info/">Here</a>
+              </p>
+            </td>
+          </tr>
+        </tbody></table>
+      </td>
+    </tr>
+  </table>
+</body>
 
 </html>

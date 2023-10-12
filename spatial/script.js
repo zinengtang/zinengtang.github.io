@@ -4,11 +4,100 @@ function isSpatialPredicate(word) {
     return spatialPredicates.includes(word);
 }
 
-function computePredicateCounts(data) {
+function mergeDicts(dict1, dict2) {
+    const merged = {};
+
+    // Iterate over the keys of dict1 and add them to the merged result
+    for (let key in dict1) {
+        merged[key] = dict1[key];
+    }
+
+    // Iterate over the keys of dict2
+    for (let key in dict2) {
+        if (merged.hasOwnProperty(key)) {
+            // If the key already exists in the merged result, add the value from dict2 to it
+            merged[key] += dict2[key];
+        } else {
+            // If the key doesn't exist, just set the key-value pair from dict2
+            merged[key] = dict2[key];
+        }
+    }
+
+    return merged;
+}
+
+
+
+function getAllKeys(dataArray, subDictKeys=[]) {
+    let allKeys = [];
+
+    dataArray.forEach(data => {
+        let currentDict = data;
+        subDictKeys.forEach(key => {
+            if (currentDict && currentDict.hasOwnProperty(key)) {
+                currentDict = currentDict[key];
+            } else {
+                currentDict = null;
+            }
+        });
+
+        if (currentDict) {
+            allKeys = [...allKeys, ...Object.keys(currentDict)];
+        }
+    });
+
+    return [...new Set(allKeys)]; // Removing duplicates by converting array to Set and then back to array
+}
+
+function computeCounts(data, allKeys) {
     const counts = {};
-    for (let predicate in data) { 
-		console.log(data[predicate]);
-        counts[predicate] = Object.values(data[predicate]).reduce(
+	allKeys.forEach(key => {
+		counts[key] = 0;
+	});
+
+    for (let key in data) {
+        let sumForKey = 0;
+
+        for (let abstractnessKey in data[key]) {
+            let sumForAbstractness = Object.values(data[key][abstractnessKey]).reduce(
+                (sum, categoryData) => sum + Object.values(categoryData).reduce(
+                    (sumCat, entryData) => sumCat + 
+                        Object.values(entryData.subject).reduce((a, b) => a + b, 0) + 
+                        Object.values(entryData.object).reduce((a, b) => a + b, 0), 0
+                ), 0
+            );
+
+            sumForKey += sumForAbstractness;
+        }
+
+        counts[key] = sumForKey;
+    }
+
+    // Sorting keys based on their numerical values and constructing a sorted object
+    const sortedCounts = {};
+    Object.keys(counts).sort((a, b) => {
+        const [aStart, aEnd] = a.split('-').map(Number);
+        const [bStart, bEnd] = b.split('-').map(Number);
+
+        if (aStart !== bStart) {
+            return aStart - bStart;
+        }
+        return aEnd - bEnd;
+    }).forEach(key => {
+        sortedCounts[key] = counts[key];
+    });
+
+    return sortedCounts;
+}
+
+function computeCategoriesCounts(data, allKeys) {
+    const counts = {};
+	allKeys.forEach(key => {
+		counts[key] = 0;
+	});
+    for (let key in data) { 
+		console.log(data[key]);
+        counts[key] = Object.values(data[key]).reduce(
             (sum, categoryData) => sum + Object.values(categoryData).reduce(
                 (sumCat, entryData) => sumCat + Object.values(entryData.subject).reduce((a, b) => a + b, 0) + 
                 Object.values(entryData.object).reduce((a, b) => a + b, 0), 0
@@ -17,6 +106,7 @@ function computePredicateCounts(data) {
     }
     return counts;
 }
+
 
 function toProportion(data, total) {
     let result = {};
@@ -39,7 +129,7 @@ function stackData(data) {
 }
 const svgWidth = 15000;
 const svgHeight = 1600;
-const margin = {top: 20, right: 20, bottom: 30, left: 40};
+const margin = {top: 200, right: 200, bottom: 300, left: 400};
 const refWidth = 1500*2;
 const optionWidth = refWidth / 12;
 const barWidth = refWidth / 12;
@@ -73,12 +163,25 @@ function stackData(data) {
     return stacked;
 }
 
+function normalizeData(data) {
+    const total = Object.values(data).reduce((acc, val) => acc + val, 0);
+    const normalized = {};
+    
+    for (let key in data) {
+        normalized[key] = (data[key] / total) * 100;  // Convert to percentage
+    }
+    
+    return normalized;
+}
+
 function drawBar(data, xOffset, total, isDetailed = false, barKeyClass) {
+	// data = normalizeData(data);
     const proportions = toProportion(data, total);
+	console.log(data, total);
     const xScale = d3.scaleLinear().domain([0, 100]).range([0, barWidthDatasets]); // Adjusted for horizontal bars
     const barData = stackData(proportions);
     const className = barKeyClass ? `bar-${xOffset} ${barKeyClass}` : `bar-${xOffset}`;
-
+	console.log(barData);
     const barHeight = svgHeight / barData.length; // Height of each individual bar
 
     svg.selectAll(`.${className}`)
@@ -91,34 +194,11 @@ function drawBar(data, xOffset, total, isDetailed = false, barKeyClass) {
         .attr("width", d => xScale(d.yEnd - d.yOffset)) // Adjusted for horizontal bars
         .attr("fill", d => colors(d.word))
         .attr("data-word", d => d.word);
-
-    // svg.selectAll(`.label-${xOffset}`)
-    //         .data(barData)
-    //         .join("text")
-    //         .attr("class", `label-${xOffset}`)
-    //         .attr("y", (d, i) => (i + 0.5) * barHeight) // Centered in the bar
-    //         .attr("x", d => xOffset + xScale(d.yEnd - d.yOffset) / 2) // Centered in the bar's width
-    //         .attr("font-size", 20)
-    //         .attr("text-anchor", "middle") // Centered text
-    //         .attr("alignment-baseline", "middle")
-    //         .each(function(d) {
-    //             const text = d3.select(this);
-    //             text.append("tspan")
-    //                 .attr("y", (d, i) => (i + 0.5) * barHeight)
-    //                 .attr("x", xOffset + xScale(d.yEnd - d.yOffset) / 2)
-    //                 .text(d.word);
-    //             text.append("tspan")
-    //                 .attr("font-size", 15)
-    //                 .attr("y", (d, i) => (i + 0.5) * barHeight)
-    //                 .attr("x", xOffset + xScale(d.yEnd - d.yOffset) / 2)
-    //                 .attr("dy", "1em")  // This moves the tspan down by 1 line
-    //                 .text(`${proportions[d.word].toFixed(2)}%`);
-    //         });
 }
 
 
 
-function drawOptions(data, xOffset, isDetailed = false, barKeyClass) {
+function drawOptions(data, xOffset, isDetailed = false, barKeyClass, height_multiplier = 1.0,) {
     const uniqueValues = Object.keys(data);
     const equalProportion = 100 / uniqueValues.length; // Equal proportion for each unique value
     const barHeight = svgHeight / uniqueValues.length; // Equal height for each bar
@@ -146,6 +226,8 @@ function drawOptions(data, xOffset, isDetailed = false, barKeyClass) {
         .text(d => d)
         .attr("text-anchor", "middle")
         .attr("alignment-baseline", "middle");
+		
+	
 }
 
 
@@ -153,7 +235,7 @@ function drawOptions(data, xOffset, isDetailed = false, barKeyClass) {
 function addTitle(xOffset, title) {
     svg.append("text")
         .attr("x", xOffset + barWidth / 2)
-        .attr("y", svgHeight + 20)
+        .attr("y", svgHeight + 40)
         .attr("text-anchor", "middle")
         .attr("alignment-baseline", "middle")
         .attr("font-size", "50px")
@@ -188,52 +270,47 @@ function drawHorizontalArrow(fromX, toX) {
 function drawBoundingBox(xStart, xEnd) {
 	svg.selectAll(".bounding-box").remove();
     svg.append("rect")
-        .attr("x", xStart-10)
+        .attr("x", xStart-100)
         .attr("y", 0-10)
         .attr("width", xEnd - xStart + barWidth + 20)
-        .attr("height", svgHeight + 40)
-        .attr("stroke", "black")
+        .attr("height", svgHeight + 100)
+        .attr("stroke", "#bababa")
         .attr("fill", "none")
-        .attr("stroke-width", 4)
+        .attr("stroke-width", 20)
 		.attr("class", "bounding-box");
 }
 
-function drawMainChart(data) {
-	let predicateCounts = [];
+function drawMainChart(data, titles) {
+	let abstractnessCounts = [];
+	let allKeys = getAllKeys(data);
 	var i = 0;
 	while (i < data.length) {
-	    predicateCounts.push(computePredicateCounts(data[i]));
-	    i++;
+		abstractnessCounts.push(computeCounts(data[i], allKeys));
+		i++;
 	}
-    const totalPredicateCounts = d3.sum(Object.values(predicateCounts[0]));
-	
+	const totalAbstractnessCounts = d3.sum(Object.values(abstractnessCounts[0]));
 	var bars_to_remove_0 = [];
 	
 	let cur_width_position = 2 * barWidth;
-	let predicate_width_position = cur_width_position;
-    drawOptions(predicateCounts[0], cur_width_position);
-	addTitle(cur_width_position, "Categories");
+	let abstractness_width_position = cur_width_position;
+	drawOptions(abstractnessCounts[0], cur_width_position);
+	addTitle(cur_width_position, "Concreteness");
 	
 	
 	cur_width_position += 1.2 * barWidth;
 	i = 0;
-	while (i < predicateCounts.length) {
-		console.log(predicateCounts[i]);
-		// bars_to_remove.push(cur_width_position);
-	    drawBar(predicateCounts[i], cur_width_position, totalPredicateCounts);
-		console.log(barWidth);
+	while (i < abstractnessCounts.length) {
+		drawBar(abstractnessCounts[i], cur_width_position, totalAbstractnessCounts);
+		addTitle(cur_width_position-50, titles[i]);
 		cur_width_position += barWidthDatasets * 0.8;
-	    i++;
+		i++;
 	}
-    cur_width_position += barWidth
-	let starting_position_after_predicate = cur_width_position;
-
-    svg.selectAll(`.bar-${predicate_width_position}`).on("click", function(event, d) {
-		
-		cur_width_position = starting_position_after_predicate;
-		
-        const prep = this.getAttribute("data-word");
-		
+	cur_width_position += barWidth
+	let starting_position_after_abstractness = cur_width_position;
+	
+	svg.selectAll(`.bar-${abstractness_width_position}`).on("click", function(event, d) {
+		cur_width_position = starting_position_after_abstractness;
+		const abstract = this.getAttribute("data-word");
 		i = 0;
 		while (i < bars_to_remove_0.length) {
 			svg.selectAll(`.bar-${bars_to_remove_0[i]}`).remove();
@@ -242,102 +319,101 @@ function drawMainChart(data) {
 		}
 		bars_to_remove_0 = [...new Set(bars_to_remove_0)]
 		
-        const categories = {};
-        for(let category in data[0][prep]) {
-            categories[category] = Object.values(data[0][prep][category]).reduce(
-                (sumCat, entryData) => sumCat + Object.values(entryData.subject).reduce((a, b) => a + b, 0) + 
-                Object.values(entryData.object).reduce((a, b) => a + b, 0), 0
-            );
-        }
-
-        const totalCategories = d3.sum(Object.values(categories));
-		let categories_width_position = cur_width_position;
-		// console.log(categories);
-		bars_to_remove_0.push(cur_width_position);
-        drawOptions(categories, cur_width_position);
-        addTitle(cur_width_position, "Prepositions");
-		cur_width_position += 1.0 * barWidth;
-		
-		i = 0;
+		let predicateCounts = [];
+		let allKeys = getAllKeys(data, [abstract]);
+		var i = 0;
 		while (i < data.length) {
-			const categories = {};
-			for(let category in data[i][prep]) {
-			    categories[category] = Object.values(data[i][prep][category]).reduce(
-			        (sumCat, entryData) => sumCat + Object.values(entryData.subject).reduce((a, b) => a + b, 0) + 
-			        Object.values(entryData.object).reduce((a, b) => a + b, 0), 0
-			    );
-			}
-			const totalCategories = d3.sum(Object.values(categories));
-			let categories_width_position = cur_width_position;
-			// console.log(categories);
-			bars_to_remove_0.push(cur_width_position);
-			drawBar(categories, cur_width_position, totalCategories);
-			// addTitle(cur_width_position, "Prepositions");
-			cur_width_position += barWidthDatasets * 0.6;
+			predicateCounts.push(computeCategoriesCounts(data[i][abstract], allKeys));
 			i++;
 		}
-		cur_width_position += 5 * barWidth
-		
-		let starting_position_after_categories = cur_width_position;
+		const totalPredicateCounts = d3.sum(Object.values(predicateCounts[0]));
 		
 		var bars_to_remove_1 = [];
-        svg.selectAll(`.bar-${categories_width_position}`).on("click", function(event, d) {
-			cur_width_position = starting_position_after_categories
-            // drawHorizontalArrow(4 * barWidth, 6 * barWidth - 10);
-			// drawBoundingBox(6 * barWidth, 10 * barWidth);
-			const category = this.getAttribute("data-word");
-
+		
+		let predicate_width_position = cur_width_position;
+		bars_to_remove_0.push(cur_width_position);
+		drawOptions(predicateCounts[0], cur_width_position);
+		addTitle(cur_width_position, "Categories");
+		
+		
+		cur_width_position += 1.2 * barWidth;
+		i = 0;
+		while (i < predicateCounts.length) {
+			bars_to_remove_0.push(cur_width_position);
+			drawBar(predicateCounts[i], cur_width_position, totalPredicateCounts);
+			addTitle(cur_width_position-50, titles[i]);
+			cur_width_position += barWidthDatasets * 0.8;
+			i++;
+		}
+		cur_width_position += barWidth
+		let starting_position_after_predicate = cur_width_position;
+		
+		svg.selectAll(`.bar-${predicate_width_position}`).on("click", function(event, d) {
+			cur_width_position = starting_position_after_predicate;
+			const prep = this.getAttribute("data-word");
 			i = 0;
 			while (i < bars_to_remove_1.length) {
 				svg.selectAll(`.bar-${bars_to_remove_1[i]}`).remove();
 				svg.selectAll(`.label-${bars_to_remove_1[i]}`).remove();
 				i ++;
 			}
-			console.log(bars_to_remove_1);
-
-            const predicates = {};
-			for(let predicate in data[0][prep][category]) {
-				predicates[predicate] = Object.values(data[0][prep][category][predicate].subject).reduce((a, b) => a + b, 0) + 
-				Object.values(data[0][prep][category][predicate].object).reduce((a, b) => a + b, 0);
+			bars_to_remove_1 = [...new Set(bars_to_remove_1)]
+			
+			let allKeys = getAllKeys(data, [abstract, prep]);
+			const categories = {};
+			allKeys.forEach(key => {
+				categories[key] = 0;
+			});
+			for(let category in data[0][abstract][prep]) {
+				categories[category] = Object.values(data[0][abstract][prep][category]).reduce(
+					(sumCat, entryData) => sumCat + Object.values(entryData.subject).reduce((a, b) => a + b, 0) + 
+					Object.values(entryData.object).reduce((a, b) => a + b, 0), 0
+				);
 			}
 
-			const totalPredicates = d3.sum(Object.values(predicates));
+			const totalCategories = d3.sum(Object.values(categories));
+			let categories_width_position = cur_width_position;
+			// console.log(categories);
 			bars_to_remove_0.push(cur_width_position);
 			bars_to_remove_1.push(cur_width_position);
-			drawOptions(predicates, cur_width_position, true, "predicates-bar");
-			addTitle(cur_width_position, "Predicates");
-			cur_width_position += 1.2 * barWidth;
-			
+			drawOptions(categories, cur_width_position);
+			addTitle(cur_width_position, "Prepositions");
+			cur_width_position += 1.0 * barWidth;
 			
 			i = 0;
 			while (i < data.length) {
-				const predicates = {};
-				for(let predicate in data[i][prep][category]) {
-					predicates[predicate] = Object.values(data[i][prep][category][predicate].subject).reduce((a, b) => a + b, 0) + 
-					Object.values(data[i][prep][category][predicate].object).reduce((a, b) => a + b, 0);
+				const categories = {};
+				allKeys.forEach(key => {
+					categories[key] = 0;
+				});
+				for(let category in data[i][abstract][prep]) {
+					categories[category] = Object.values(data[i][abstract][prep][category]).reduce(
+						(sumCat, entryData) => sumCat + Object.values(entryData.subject).reduce((a, b) => a + b, 0) + 
+						Object.values(entryData.object).reduce((a, b) => a + b, 0), 0
+					);
 				}
+				const totalCategories = d3.sum(Object.values(categories));
+				let categories_width_position = cur_width_position;
+				// console.log(categories);
 				bars_to_remove_0.push(cur_width_position);
 				bars_to_remove_1.push(cur_width_position);
-				drawBar(predicates, cur_width_position, totalPredicates, true, "predicates-bar");
-				// addTitle(cur_width_position, "Predicates");
-				cur_width_position += barWidthDatasets * 0.6;
+				drawBar(categories, cur_width_position, totalCategories);
+				addTitle(cur_width_position-50, titles[i]);
+				// addTitle(cur_width_position, "Prepositions");
+				cur_width_position += barWidthDatasets * 0.8;
 				i++;
 			}
-			cur_width_position += barWidth
 			
-			// New: Handle click event on each predicate
-			let starting_position_after_predicates = cur_width_position;
+			cur_width_position += 5 * barWidth
+			
+			let starting_position_after_categories = cur_width_position;
+			
 			var bars_to_remove_2 = [];
-			let cur_width_subjects_position = starting_position_after_categories - 4 * barWidth;
-			let starting_width_subjects_position = cur_width_subjects_position;
-			let cur_width_objects_position = cur_width_position + 2 * barWidth
-			let starting_width_objects_position = cur_width_objects_position;
-			drawBoundingBox(cur_width_subjects_position - 50, cur_width_objects_position + 50);
-			svg.selectAll(".predicates-bar").on("click", function(event, d) {
-				cur_width_subjects_position = starting_width_subjects_position;
-				cur_width_objects_position = starting_width_objects_position;
-				
-				const predicate = this.getAttribute("data-word");
+			svg.selectAll(`.bar-${categories_width_position}`).on("click", function(event, d) {
+				cur_width_position = starting_position_after_categories
+				// drawHorizontalArrow(4 * barWidth, 6 * barWidth - 10);
+				// drawBoundingBox(6 * barWidth, 10 * barWidth);
+				const category = this.getAttribute("data-word");
 
 				i = 0;
 				while (i < bars_to_remove_2.length) {
@@ -345,81 +421,206 @@ function drawMainChart(data) {
 					svg.selectAll(`.label-${bars_to_remove_2[i]}`).remove();
 					i ++;
 				}
-				console.log(bars_to_remove_2);
 
-				const subjects = data[0][prep][category][predicate].subject;
-				const objects = data[0][prep][category][predicate].object;
+				const predicates = {};
+				let allKeys = getAllKeys(data, [abstract, prep, category]);
+				allKeys.forEach(key => {
+					predicates[key] = 0;
+				});
+				for(let predicate in data[0][abstract][prep][category]) {
+					predicates[predicate] = Object.values(data[0][abstract][prep][category][predicate].subject).reduce((a, b) => a + b, 0) + 
+					Object.values(data[0][abstract][prep][category][predicate].object).reduce((a, b) => a + b, 0);
+				}
 
-				const totalSubjects = d3.sum(Object.values(subjects));
-				const totalObjects = d3.sum(Object.values(objects));
-
-				bars_to_remove_0.push(cur_width_subjects_position);
-				bars_to_remove_1.push(cur_width_subjects_position);
-				bars_to_remove_2.push(cur_width_subjects_position);
-				drawOptions(subjects, cur_width_subjects_position, true);
-				addTitle(cur_width_subjects_position, "Subject phrases");
-
-				bars_to_remove_0.push(cur_width_objects_position);
-				bars_to_remove_1.push(cur_width_objects_position);
-				bars_to_remove_2.push(cur_width_objects_position);
-				drawOptions(objects, cur_width_objects_position, true);
-				addTitle(cur_width_objects_position, "Object phrases");
+				const totalPredicates = d3.sum(Object.values(predicates));
+				bars_to_remove_0.push(cur_width_position);
+				bars_to_remove_1.push(cur_width_position);
+				bars_to_remove_2.push(cur_width_position);
+				drawOptions(predicates, cur_width_position, true, "predicates-bar");
+				addTitle(cur_width_position, "Predicates");
+				cur_width_position += 1.2 * barWidth;
 				
-				cur_width_subjects_position += 1.2 * barWidth;
-				cur_width_objects_position += 1.2 * barWidth;
 				
 				i = 0;
 				while (i < data.length) {
-					const subjects = data[i][prep][category][predicate].subject;
-					const objects = data[i][prep][category][predicate].object;
+					const predicates = {};
+					allKeys.forEach(key => {
+						predicates[key] = 0;
+					});
+					for(let predicate in data[i][abstract][prep][category]) {
+						predicates[predicate] = Object.values(data[i][abstract][prep][category][predicate].subject).reduce((a, b) => a + b, 0) + 
+						Object.values(data[i][abstract][prep][category][predicate].object).reduce((a, b) => a + b, 0);
+					}
+					bars_to_remove_0.push(cur_width_position);
+					bars_to_remove_1.push(cur_width_position);
+					bars_to_remove_2.push(cur_width_position);
+					drawBar(predicates, cur_width_position, totalPredicates, true, "predicates-bar");
+					addTitle(cur_width_position-50, titles[i]);
+					// addTitle(cur_width_position, "Predicates");
+					cur_width_position += barWidthDatasets * 0.8;
+					i++;
+				}
+				cur_width_position += barWidth
+				
+				// New: Handle click event on each predicate
+				let starting_position_after_predicates = cur_width_position;
+				var bars_to_remove_3 = [];
+				let cur_width_subjects_position = starting_position_after_categories - 4 * barWidth;
+				let starting_width_subjects_position = cur_width_subjects_position;
+				let cur_width_objects_position = cur_width_position + 2 * barWidth
+				let starting_width_objects_position = cur_width_objects_position;
+				drawBoundingBox(cur_width_subjects_position - 50, cur_width_objects_position + 50);
+				svg.selectAll(".predicates-bar").on("click", function(event, d) {
+					cur_width_subjects_position = starting_width_subjects_position;
+					cur_width_objects_position = starting_width_objects_position;
 					
-					const totalSubjects = d3.sum(Object.values(subjects));
-					const totalObjects = d3.sum(Object.values(objects));
+					const predicate = this.getAttribute("data-word");
+
+					i = 0;
+					while (i < bars_to_remove_3.length) {
+						svg.selectAll(`.bar-${bars_to_remove_3[i]}`).remove();
+						svg.selectAll(`.label-${bars_to_remove_3[i]}`).remove();
+						i ++;
+					}
+					
+					const subjectsKeysSet = new Set();
+					const objectsKeysSet = new Set();
+					i = 0;
+					while (i < data.length) {
+					    if (data[i][abstract] && data[i][abstract][prep] && data[i][abstract][prep][category] && data[i][abstract][prep][category][predicate]) {
+					        const subjects = data[i][abstract][prep][category][predicate].subject;
+					        const objects = data[i][abstract][prep][category][predicate].object;
+					
+					        if (subjects) {
+					            Object.keys(subjects).forEach(key => subjectsKeysSet.add(key));
+					        }
+					
+					        if (objects) {
+					            Object.keys(objects).forEach(key => objectsKeysSet.add(key));
+					        }
+					    }
+					    i++;
+					}
+					const subjectsKeys = [...subjectsKeysSet];
+					const objectsKeys = [...objectsKeysSet];
+
+					var subjectAll = {};
+					subjectsKeys.forEach(key => {
+						subjectAll[key] = 0;
+					});
+					var objectAll = {};
+					objectsKeys.forEach(key => {
+						objectAll[key] = 0;
+					});
+					
+					// i = 0;
+					// while (i < data.length) {
+					// 	if (data[i][abstract] && data[i][abstract][prep] && data[i][abstract][prep][category] && data[i][abstract][prep][category][predicate]) {
+					// 		var subjects = data[i][abstract][prep][category][predicate].subject;
+					// 		var objects = data[i][abstract][prep][category][predicate].object;
+					// 		subjectAll = mergeDicts(subjects, subjectAll);
+					// 		objectAll = mergeDicts(objects, objectAll);
+					// 	}
+					// }
+					// console.log(1111, subjectAll)
+					const totalSubjects = d3.sum(Object.values(subjectAll));
+					const totalObjects = d3.sum(Object.values(objectAll));
+					
+					// subjectsKeys.forEach(key => {
+					// 	subjectAll[key] = 0;
+					// });
+					// objectsKeys.forEach(key => {
+					// 	objectAll[key] = 0;
+					// });
 					
 					bars_to_remove_0.push(cur_width_subjects_position);
 					bars_to_remove_1.push(cur_width_subjects_position);
 					bars_to_remove_2.push(cur_width_subjects_position);
-					drawBar(subjects, cur_width_subjects_position, totalSubjects, true);
-					// addTitle(starting_position_after_categories - 4 * barWidth, "Subject phrases");
-					
+					bars_to_remove_3.push(cur_width_subjects_position);
+					drawOptions(subjectAll, cur_width_subjects_position, true);
+					addTitle(cur_width_subjects_position, "Subject phrases");
+
 					bars_to_remove_0.push(cur_width_objects_position);
 					bars_to_remove_1.push(cur_width_objects_position);
 					bars_to_remove_2.push(cur_width_objects_position);
-					drawBar(objects, cur_width_objects_position, totalObjects, true);
-					// addTitle(cur_width_position + 2 * barWidth, "Object phrases");
-					cur_width_subjects_position += barWidthDatasets * 0.6;
-					cur_width_objects_position += barWidthDatasets * 0.6;
-					i++;
-				}
-				drawBoundingBox(starting_width_subjects_position - 50, cur_width_objects_position + 50);
+					bars_to_remove_3.push(cur_width_objects_position);
+					drawOptions(objectAll, cur_width_objects_position, true);
+					addTitle(cur_width_objects_position, "Object phrases");
+					
+					cur_width_subjects_position += 1.2 * barWidth;
+					cur_width_objects_position += 1.2 * barWidth;
+					
+					i = 0;
+					while (i < data.length) {
+						if (data[i][abstract] && data[i][abstract][prep] && data[i][abstract][prep][category] && data[i][abstract][prep][category][predicate]) {
+							var subjects = data[i][abstract][prep][category][predicate].subject;
+							var objects = data[i][abstract][prep][category][predicate].object;
+							subjects = mergeDicts(subjects, subjectAll);
+							objects = mergeDicts(objects, objectAll);
+						}
+						else {
+							subjects = subjectAll;
+							objects = objectAll;
+						}
+						
+						const totalSubjects = d3.sum(Object.values(subjects));
+						const totalObjects = d3.sum(Object.values(objects));
+						
+						bars_to_remove_0.push(cur_width_subjects_position);
+						bars_to_remove_1.push(cur_width_subjects_position);
+						bars_to_remove_2.push(cur_width_subjects_position);
+						bars_to_remove_3.push(cur_width_subjects_position);
+						drawBar(subjects, cur_width_subjects_position, totalSubjects, true);
+						addTitle(cur_width_subjects_position-50, titles[i]);
+						// addTitle(starting_position_after_categories - 4 * barWidth, "Subject phrases");
+						
+						bars_to_remove_0.push(cur_width_objects_position);
+						bars_to_remove_1.push(cur_width_objects_position);
+						bars_to_remove_2.push(cur_width_objects_position);
+						bars_to_remove_3.push(cur_width_objects_position);
+						drawBar(objects, cur_width_objects_position, totalObjects, true);
+						addTitle(cur_width_objects_position-50, titles[i]);
+						// addTitle(cur_width_position + 2 * barWidth, "Object phrases");
+						cur_width_subjects_position += barWidthDatasets * 0.8;
+						cur_width_objects_position += barWidthDatasets * 0.8;
+						i++;
+					}
+					drawBoundingBox(starting_width_subjects_position - 50, cur_width_objects_position + 50);
+				});
 			});
-        });
-    });
+		});
+	});
 }
 
-function init(bigrams) {
-    drawMainChart(bigrams);
+function init(bigrams, titles) {
+    drawMainChart(bigrams, titles);
 }
 
-function transformData(originalData) {
-    let transformedData = {};
+// function transformData(originalData) {
+//     let transformedData = {};
 
-    for (let preposition in originalData) {
-        for (let category in originalData[preposition]) {
-            if (!transformedData[category]) {
-                transformedData[category] = {};
-            }
-            transformedData[category][preposition] = originalData[preposition][category];
-        }
-    }
+//     for (let preposition in originalData) {
+//         for (let category in originalData[preposition]) {
+//             if (!transformedData[category]) {
+//                 transformedData[category] = {};
+//             }
+//             transformedData[category][preposition] = originalData[preposition][category];
+//         }
+//     }
 
-    return transformedData;
-}
+//     return transformedData;
+// }
 
-d3.json("bigrams.json").then(data => {
-    const transformedData = transformData(data);
-	const inputData = Array(transformedData, transformedData);
-    init(inputData);
-}).catch(error => {
-    console.error("Error loading the bigrams.json file:", error);
+Promise.all([
+    d3.json("bigrams_mad.json"),
+    d3.json("bigrams_ego4d.json"),
+	d3.json("bigrams_laion.json")
+])
+.then(([dataMad, dataEgo, dataLaion]) => {
+    const inputData = [dataMad, dataEgo, dataLaion];
+	const titles = ['MADv2', 'EGO4D', 'LAION']
+    init(inputData, titles);
+})
+.catch(error => {
+    console.error("Error loading the JSON files:", error);
 });

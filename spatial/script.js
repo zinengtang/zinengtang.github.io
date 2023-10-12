@@ -129,7 +129,7 @@ function stackData(data) {
 }
 const svgWidth = 15000;
 const svgHeight = 1600;
-const margin = {top: 200, right: 200, bottom: 300, left: 400};
+const margin = {top: 200, right: 200, bottom: 500, left: 400};
 const refWidth = 1500*2;
 const optionWidth = refWidth / 12;
 const barWidth = refWidth / 12;
@@ -198,7 +198,7 @@ function drawBar(data, xOffset, total, isDetailed = false, barKeyClass) {
 
 
 
-function drawOptions(data, xOffset, isDetailed = false, barKeyClass, height_multiplier = 1.0,) {
+function drawOptions(data, xOffset, isDetailed = false, barKeyClass, height_multiplier = 1.0) {
     const uniqueValues = Object.keys(data);
     const equalProportion = 100 / uniqueValues.length; // Equal proportion for each unique value
     const barHeight = svgHeight / uniqueValues.length; // Equal height for each bar
@@ -213,7 +213,9 @@ function drawOptions(data, xOffset, isDetailed = false, barKeyClass, height_mult
         .attr("y", (d, i) => i * barHeight)
         .attr("width", barWidth)
         .attr("height", barHeight)
-        .attr("fill", d => options_colors(d))
+        .attr("fill", "#91a9ff") // Constant color for all subbars
+        .attr("stroke", "#0037ff") // Dark outline for the bars
+        .attr("stroke-width", "2") // Outline width
         .attr("data-word", d => d);
 
     svg.selectAll(`.label-${xOffset}`)
@@ -222,13 +224,12 @@ function drawOptions(data, xOffset, isDetailed = false, barKeyClass, height_mult
         .attr("class", `label-${xOffset}`)
         .attr("x", xOffset + barWidth / 2)
         .attr("y", (d, i) => (i + 0.5) * barHeight) // Center the label in the bar
-        .attr("font-size", "30px") // Since each bar has equal height, we can set a constant font size
+        .attr("font-size", "40px") // Since each bar has equal height, we can set a constant font size
         .text(d => d)
         .attr("text-anchor", "middle")
         .attr("alignment-baseline", "middle");
-		
-	
 }
+
 
 
 
@@ -280,7 +281,20 @@ function drawBoundingBox(xStart, xEnd) {
 		.attr("class", "bounding-box");
 }
 
+function handleFade(clickedElement, className) {
+    // Set the opacity of all bars in the group to fade out
+    svg.selectAll(className)
+        .attr("fill-opacity", 0.3);
+
+    // Set the opacity of the clicked bar to 1 (or any other desired value)
+    d3.select(clickedElement)
+        .attr("fill-opacity", 1);
+}
+
+
+
 function drawMainChart(data, titles) {
+	
 	let abstractnessCounts = [];
 	let allKeys = getAllKeys(data);
 	var i = 0;
@@ -291,7 +305,7 @@ function drawMainChart(data, titles) {
 	const totalAbstractnessCounts = d3.sum(Object.values(abstractnessCounts[0]));
 	var bars_to_remove_0 = [];
 	
-	let cur_width_position = 2 * barWidth;
+	let cur_width_position = barWidth;
 	let abstractness_width_position = cur_width_position;
 	drawOptions(abstractnessCounts[0], cur_width_position);
 	addTitle(cur_width_position, "Concreteness");
@@ -309,8 +323,12 @@ function drawMainChart(data, titles) {
 	let starting_position_after_abstractness = cur_width_position;
 	
 	svg.selectAll(`.bar-${abstractness_width_position}`).on("click", function(event, d) {
+		let clickHistory = [];
+		
 		cur_width_position = starting_position_after_abstractness;
 		const abstract = this.getAttribute("data-word");
+		handleFade(this, `.bar-${abstractness_width_position}`);
+
 		i = 0;
 		while (i < bars_to_remove_0.length) {
 			svg.selectAll(`.bar-${bars_to_remove_0[i]}`).remove();
@@ -351,6 +369,7 @@ function drawMainChart(data, titles) {
 		svg.selectAll(`.bar-${predicate_width_position}`).on("click", function(event, d) {
 			cur_width_position = starting_position_after_predicate;
 			const prep = this.getAttribute("data-word");
+			handleFade(this, `.bar-${predicate_width_position}`);
 			i = 0;
 			while (i < bars_to_remove_1.length) {
 				svg.selectAll(`.bar-${bars_to_remove_1[i]}`).remove();
@@ -378,7 +397,7 @@ function drawMainChart(data, titles) {
 			bars_to_remove_1.push(cur_width_position);
 			drawOptions(categories, cur_width_position);
 			addTitle(cur_width_position, "Prepositions");
-			cur_width_position += 1.0 * barWidth;
+			cur_width_position += 1.2 * barWidth;
 			
 			i = 0;
 			while (i < data.length) {
@@ -414,7 +433,7 @@ function drawMainChart(data, titles) {
 				// drawHorizontalArrow(4 * barWidth, 6 * barWidth - 10);
 				// drawBoundingBox(6 * barWidth, 10 * barWidth);
 				const category = this.getAttribute("data-word");
-
+				handleFade(this, `.bar-${categories_width_position}`);
 				i = 0;
 				while (i < bars_to_remove_2.length) {
 					svg.selectAll(`.bar-${bars_to_remove_2[i]}`).remove();
@@ -475,7 +494,7 @@ function drawMainChart(data, titles) {
 					cur_width_objects_position = starting_width_objects_position;
 					
 					const predicate = this.getAttribute("data-word");
-
+					handleFade(this, ".predicates-bar");
 					i = 0;
 					while (i < bars_to_remove_3.length) {
 						svg.selectAll(`.bar-${bars_to_remove_3[i]}`).remove();

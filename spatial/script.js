@@ -92,9 +92,16 @@ function computeCounts(data, allKeys) {
 
 function computeCategoriesCounts(data, allKeys) {
     const counts = {};
+	
+	// Sort the keys by their string value
+	allKeys.sort((a, b) => a.localeCompare(b));
+
+	// Initialize the counts object
 	allKeys.forEach(key => {
 		counts[key] = 0;
 	});
+
+	// Calculate counts for each key
     for (let key in data) { 
 		console.log(data[key]);
         counts[key] = Object.values(data[key]).reduce(
@@ -106,6 +113,7 @@ function computeCategoriesCounts(data, allKeys) {
     }
     return counts;
 }
+
 
 
 function toProportion(data, total) {

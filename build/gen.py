@@ -140,8 +140,7 @@ def authors_html(auths):
     return ', '.join(parts)
 
 def chips(mods):
-    return ''.join(
-        f'<span class="chip"><i style="background:{MOD_COLORS[m]}"></i>{m}</span>' for m in mods)
+    return ''  # modality chips removed
 
 def links_html(links):
     return ' '.join(f'<a class="plink" href="{u}" target="_blank" rel="noopener">{t}</a>' for t, u in links)

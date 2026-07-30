@@ -46,7 +46,7 @@ a:focus-visible { outline: 2px solid var(--rock); outline-offset: 2px; border-ra
 }
 
 /* ---------- left rail ---------- */
-.rail { position: sticky; top: 50vh; transform: translateY(-50%); align-self: start; }
+.rail { position: sticky; top: 48px; align-self: start; }
 .portrait {
   width: 100%; max-width: 174px; aspect-ratio: 1; object-fit: cover;
   border-radius: 6px;
@@ -162,10 +162,9 @@ main > section:nth-child(4) { animation-delay: .18s; }
 
 @media (max-width: 860px) {
   .wrap { grid-template-columns: 1fr; gap: 36px; padding-top: 36px; }
-  .rail { position: static; transform: none; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; }
-  .portrait { max-width: 120px; }
-  .rail h1 { margin-top: 14px; font-size: 28px; }
-  .rail nav { justify-content: center; margin-top: 16px; }
+  .rail { position: static; display: grid; grid-template-columns: 120px 1fr; gap: 20px; align-items: center; }
+  .portrait { max-width: 90px; }
+  .rail h1 { margin-top: 0; font-size: 28px; }
   .rail nav { grid-column: 1 / -1; }
   .cathead h2 { font-size: 21px; }
   .pub { grid-template-columns: 84px 1fr; gap: 14px; }

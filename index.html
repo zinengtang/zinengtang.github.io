@@ -41,7 +41,7 @@ a:focus-visible { outline: 2px solid var(--rock); outline-offset: 2px; border-ra
   margin: 0 auto;
   padding: 56px 28px 80px;
   display: grid;
-  grid-template-columns: 288px 1fr;
+  grid-template-columns: 236px 1fr;
   gap: 60px;
 }
 
@@ -162,10 +162,11 @@ main > section:nth-child(4) { animation-delay: .18s; }
 
 @media (max-width: 860px) {
   .wrap { grid-template-columns: 1fr; gap: 36px; padding-top: 36px; }
-  .rail { position: static; display: grid; grid-template-columns: 120px 1fr; gap: 20px; align-items: center; }
-  .portrait { max-width: 90px; }
-  .rail h1 { margin-top: 0; font-size: 28px; }
-  .rail nav { grid-column: 1 / -1; }
+  .rail { position: static; transform: none; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; width: 100%; max-width: 420px; margin: 0 auto; }
+  .portrait { max-width: 148px; }
+  .rail h1 { margin-top: 14px; font-size: 28px; }
+  .rail .role { margin-top: 8px; }
+  .rail nav { justify-content: center; margin-top: 16px; }
   .cathead h2 { font-size: 21px; }
   .pub { grid-template-columns: 84px 1fr; gap: 14px; }
   .pimg, .ptile { width: 84px; }

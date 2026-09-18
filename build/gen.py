@@ -370,7 +370,6 @@ main > section:nth-child(4) {{ animation-delay: .18s; }}
   <aside class="rail">
     <img class="portrait" src="{IMGS['zineng.jpg']}" alt="Portrait of Zineng Tang">
     <h1>Zineng Tang</h1>
-    <p class="role">Ph.D. student, <b>UC Berkeley</b><br>Berkeley Artificial Intelligence Research</p>
     <nav aria-label="Profile links">
       <a href="mailto:zn.tang.terran@gmail.com">email</a>
       <a href="images/CV.pdf">cv</a>

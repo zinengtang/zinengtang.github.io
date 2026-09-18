@@ -410,6 +410,8 @@ main > section:nth-child(4) {{ animation-delay: .18s; }}
   </main>
 
 </div>
+<script data-goatcounter="https://terrantang.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>'''
 

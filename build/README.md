@@ -10,3 +10,10 @@ Build files for the personal site (not needed for the site to run).
 - Note: the category nav pills and one removed placeholder line were patched
   into index.html after generation; if you regenerate, copy the .catnav block
   from the current index.html.
+
+Blog (blog/):
+- blog/index.html, blog/posts.json and blog/<slug>/ are written by the editor
+  (blog/edit.html) when you publish; don't edit them by hand.
+- Drafts live in the private repo zinengtang/blog-drafts, never in this repo.
+- Templates for the public blog pages: blog/render.js. Styles: blog/blog.css.
+- The "blog" pill in the rail nav was added to index.html (and gen.py).

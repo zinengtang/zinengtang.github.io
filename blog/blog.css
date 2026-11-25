@@ -1,0 +1,91 @@
+/* Shared styles for the blog: public pages (blog/index.html, blog/<slug>/index.html) and the editor. */
+:root {
+  --bg: #FBFBF9;
+  --ink: #14283C;
+  --muted: #5B6B79;
+  --berkeley: #003262;
+  --rock: #3B7EA1;
+  --gold: #FDB515;
+  --line: #E3E6E4;
+  --card: #FFFFFF;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Instrument Sans', system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--rock); text-decoration: none; }
+a:hover { color: var(--berkeley); text-decoration: underline; text-decoration-color: var(--gold); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+a:focus-visible { outline: 2px solid var(--rock); outline-offset: 2px; border-radius: 2px; }
+
+.bwrap { max-width: 760px; margin: 0 auto; padding: 48px 24px 80px; }
+
+/* header / breadcrumb */
+.bhead {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  font-family: 'Spline Sans Mono', monospace; font-size: 13px; color: var(--muted);
+  padding-bottom: 18px; border-bottom: 1px solid var(--line); margin-bottom: 40px;
+}
+.bhead .home { font-family: 'Newsreader', serif; font-size: 19px; font-weight: 600; color: var(--berkeley); }
+.bhead .sep { color: var(--line); }
+.bhead .owner { margin-left: auto; display: none; }
+.bhead .owner.on { display: inline; }
+
+/* index page */
+.btitle {
+  font-family: 'Newsreader', serif; font-optical-sizing: auto;
+  font-size: 40px; font-weight: 600; letter-spacing: -0.01em; color: var(--berkeley);
+  margin-bottom: 28px;
+}
+.plist { list-style: none; }
+.plist li { padding: 20px 0; border-top: 1px dashed var(--line); }
+.plist li:first-child { border-top: 0; padding-top: 0; }
+.plist .d { font-family: 'Spline Sans Mono', monospace; font-size: 12.5px; color: var(--muted); }
+.plist h2 { font-family: 'Newsreader', serif; font-size: 24px; font-weight: 600; line-height: 1.3; margin-top: 2px; }
+.plist h2 a { color: var(--ink); }
+.plist h2 a:hover { color: var(--berkeley); }
+.plist .x { color: var(--muted); font-size: 15px; margin-top: 6px; }
+.empty { color: var(--muted); font-style: italic; }
+
+/* post page */
+.ptitle {
+  font-family: 'Newsreader', serif; font-optical-sizing: auto;
+  font-size: 40px; line-height: 1.2; font-weight: 600; letter-spacing: -0.01em; color: var(--ink);
+}
+.pdate { font-family: 'Spline Sans Mono', monospace; font-size: 13px; color: var(--muted); margin: 10px 0 32px; }
+.bfoot { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 14px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; color: var(--muted); }
+
+/* post body: shared by the public post page and the editor */
+.post { font-size: 17px; line-height: 1.75; }
+.post::after { content: ""; display: table; clear: both; }
+.post p, .post ul, .post ol, .post blockquote, .post pre { margin: 0 0 1.1em; }
+.post h2 { font-family: 'Newsreader', serif; font-size: 27px; font-weight: 600; line-height: 1.3; margin: 1.5em 0 .5em; color: var(--berkeley); }
+.post h3 { font-family: 'Newsreader', serif; font-size: 21px; font-weight: 600; line-height: 1.35; margin: 1.3em 0 .4em; }
+.post ul, .post ol { padding-left: 1.4em; }
+.post li + li { margin-top: .3em; }
+.post blockquote { border-left: 3px solid var(--gold); padding: 2px 0 2px 18px; color: var(--muted); font-family: 'Newsreader', serif; font-size: 19px; }
+.post code { font-family: 'Spline Sans Mono', monospace; font-size: .88em; background: #F0F2F1; padding: 1px 5px; border-radius: 3px; }
+.post hr { border: 0; border-top: 1px solid var(--line); margin: 2em 0; clear: both; }
+
+/* images: float with text wrap (left/right, three sizes) or full width */
+.post figure.img { margin: 6px 0 16px; }
+.post figure.img img { display: block; width: 100%; height: auto; border-radius: 4px; border: 1px solid var(--line); background: #fff; }
+.post figure.img figcaption { font-size: 13.5px; line-height: 1.5; color: var(--muted); margin-top: 7px; }
+.post figure.left  { float: left;  margin-right: 26px; }
+.post figure.right { float: right; margin-left: 26px; }
+.post figure.left.s, .post figure.right.s { width: 32%; }
+.post figure.left.m, .post figure.right.m { width: 45%; }
+.post figure.left.l, .post figure.right.l { width: 60%; }
+.post figure.full { float: none; clear: both; width: 100%; margin: 26px 0; }
+.post figure.full figcaption { text-align: center; }
+
+@media (max-width: 640px) {
+  .bwrap { padding-top: 32px; }
+  .btitle, .ptitle { font-size: 31px; }
+  .post { font-size: 16.5px; }
+  .post figure.left, .post figure.right { float: none; width: 100% !important; margin: 18px 0; }
+}

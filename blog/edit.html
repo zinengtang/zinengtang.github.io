@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Blog editor — Zineng Tang</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2218%22 fill=%22%23003262%22/><text x=%2250%22 y=%2268%22 font-size=%2252%22 text-anchor=%22middle%22 fill=%22%23FDB515%22 font-family=%22Georgia%22>Z</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..600&family=Instrument+Sans:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="blog.css">
+<link rel="stylesheet" href="edit.css">
+</head>
+<body>
+<div class="ewrap">
+  <header class="ebar">
+    <a class="home" href="./">← Blog</a>
+    <span class="etitle">Editor</span>
+    <span id="conn" class="conn">not connected</span>
+    <button id="btnSettings" class="ghost" type="button">Settings</button>
+  </header>
+
+  <!-- list of posts (drafts and published) -->
+  <section id="viewList">
+    <div class="listhead">
+      <h1>Posts</h1>
+      <button id="btnNew" class="primary" type="button">New post</button>
+    </div>
+    <ul id="postList" class="elist"></ul>
+    <p id="listHint" class="hint"></p>
+  </section>
+
+  <!-- editor -->
+  <section id="viewEdit" hidden>
+    <div class="metarow">
+      <button id="btnBack" class="ghost" type="button">← Posts</button>
+      <span id="status" class="badge"></span>
+      <span class="spacer"></span>
+      <button id="btnSave" type="button" title="Save draft (Ctrl/⌘ S)">Save draft</button>
+      <button id="btnPublish" class="primary" type="button">Publish</button>
+    </div>
+
+    <input id="title" class="tinput" placeholder="Title" autocomplete="off">
+    <div class="slugrow"><span>address:&nbsp;…/blog/</span><input id="slug" class="sinput" spellcheck="false" autocomplete="off" aria-label="Post address"><span>/</span></div>
+
+    <div class="toolbar" id="toolbar" role="toolbar" aria-label="Formatting">
+      <button data-cmd="bold" title="Bold"><b>B</b></button>
+      <button data-cmd="italic" title="Italic"><i>I</i></button>
+      <span class="tsep"></span>
+      <button data-cmd="h2" title="Heading">H2</button>
+      <button data-cmd="h3" title="Subheading">H3</button>
+      <button data-cmd="p" title="Paragraph">¶</button>
+      <button data-cmd="quote" title="Quote">“ ”</button>
+      <span class="tsep"></span>
+      <button data-cmd="ul" title="Bulleted list">• list</button>
+      <button data-cmd="ol" title="Numbered list">1. list</button>
+      <button data-cmd="link" title="Link">link</button>
+      <button data-cmd="hr" title="Divider">—</button>
+      <span class="tsep"></span>
+      <button data-cmd="image" class="imgbtn" title="Insert image (you can also paste or drag images in)">+ image</button>
+    </div>
+
+    <div class="canvas" id="canvas">
+      <div id="body" class="post editable" contenteditable="true" spellcheck="true"></div>
+      <div id="figbar" class="figbar" hidden role="toolbar" aria-label="Image layout">
+        <button data-fig="left" title="Float left, text wraps on the right">◧ left</button>
+        <button data-fig="right" title="Float right, text wraps on the left">◨ right</button>
+        <button data-fig="full" title="Full width">▭ full</button>
+        <span class="fsep"></span>
+        <button data-fig="s" title="Small">S</button>
+        <button data-fig="m" title="Medium">M</button>
+        <button data-fig="l" title="Large">L</button>
+        <span class="fsep"></span>
+        <button data-fig="caption" title="Show or hide caption">caption</button>
+        <button data-fig="up" title="Move up">↑</button>
+        <button data-fig="down" title="Move down">↓</button>
+        <button data-fig="delete" class="danger" title="Remove image">✕</button>
+      </div>
+    </div>
+
+    <div class="morerow">
+      <a id="lnkLive" target="_blank" rel="noopener" hidden>View live ↗</a>
+      <button id="btnUnpublish" class="ghost danger" type="button" hidden>Unpublish</button>
+      <span class="spacer"></span>
+      <button id="btnDelete" class="ghost danger" type="button">Delete post</button>
+    </div>
+    <input type="file" id="filePick" accept="image/*" multiple hidden>
+  </section>
+</div>
+
+<dialog id="dlgSettings">
+  <form method="dialog" class="settings">
+    <h2>Settings</h2>
+    <label>GitHub token
+      <input id="sToken" type="password" autocomplete="off" placeholder="github_pat_…">
+    </label>
+    <p class="hint">Create a <b>fine-grained token</b> on GitHub (Settings → Developer settings → Personal access tokens → Fine-grained tokens).
+      Repository access: <i>only</i> the two repositories below. Permissions: <b>Contents → Read and write</b>.
+      The token is stored only in this browser and sent only to api.github.com.</p>
+    <label class="check"><input id="sRemember" type="checkbox"> Remember on this device</label>
+    <label>Site repository <input id="sSite" placeholder="owner/owner.github.io" spellcheck="false"></label>
+    <label>Drafts repository (private) <input id="sDrafts" placeholder="owner/blog-drafts" spellcheck="false"></label>
+    <label>Branch <input id="sBranch" placeholder="main" spellcheck="false"></label>
+    <div class="row"><button id="sTest" type="button">Test connection</button><span id="sResult" class="hint"></span></div>
+    <div class="row end">
+      <button value="cancel" class="ghost" formnovalidate>Cancel</button>
+      <button id="sSave" value="save" class="primary">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+<script type="module" src="edit.js"></script>
+</body>
+</html>
